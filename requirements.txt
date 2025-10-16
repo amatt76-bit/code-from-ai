@@ -1,0 +1,9 @@
+# OpenAI API client library
+openai>=1.0.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Optional: For advanced features
+# requests>=2.31.0
+# aiohttp>=3.9.0
