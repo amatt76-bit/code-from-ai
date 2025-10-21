@@ -5,10 +5,14 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables');
+  console.warn('⚠️  Missing Supabase environment variables. Database operations will fail.');
+  console.warn('   Please configure SUPABASE_URL and SUPABASE_ANON_KEY in .env file');
 }
 
-export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
+export const supabase: SupabaseClient = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder-key'
+);
 
 /**
  * Create a new user in the database

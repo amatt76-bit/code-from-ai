@@ -5,7 +5,7 @@ import {
   saveConversation,
   updateConversation,
 } from '../services/supabase';
-import { Conversation, ConversationMessage } from '../types';
+import { Conversation } from '../types';
 import {
   generateConversationSummary,
   analyzeConversationSentiment,

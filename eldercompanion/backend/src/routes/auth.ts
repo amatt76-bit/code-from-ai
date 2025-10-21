@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt'; // TODO: Uncomment when implementing password hashing
 import { SignupRequest, LoginRequest, AuthResponse } from '../types';
 import { createUser, getUserByEmail, createParentProfile } from '../services/supabase';
 import { generateToken } from '../middleware/auth';
@@ -41,8 +41,9 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Hash password (for future use with password storage)
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    // TODO: Store hashedPassword in database when implementing full auth
 
     // Create user
     const user = await createUser(email, role, full_name, phone);

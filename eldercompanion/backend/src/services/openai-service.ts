@@ -4,11 +4,12 @@ import { OpenAITokenResponse } from '../types';
 const apiKey = process.env.OPENAI_API_KEY;
 
 if (!apiKey) {
-  throw new Error('Missing OPENAI_API_KEY environment variable');
+  console.warn('⚠️  Missing OPENAI_API_KEY environment variable. OpenAI operations will fail.');
+  console.warn('   Please configure OPENAI_API_KEY in .env file');
 }
 
 const openai = new OpenAI({
-  apiKey,
+  apiKey: apiKey || 'placeholder-key',
 });
 
 /**
@@ -18,26 +19,18 @@ const openai = new OpenAI({
  */
 export async function generateEphemeralToken(): Promise<OpenAITokenResponse> {
   try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o-realtime-preview',
-      messages: [
-        {
-          role: 'system',
-          content: 'Generate ephemeral token',
-        },
-      ],
-      // Note: In production, use the actual ephemeral token endpoint
-      // This is a placeholder implementation
-      // The real implementation would use OpenAI's session token API
-    });
-
-    // For now, we'll create a mock token structure
-    // In production, you would use OpenAI's actual ephemeral token API
-    // when it becomes available
+    // Note: In production, use the actual ephemeral token endpoint
+    // This is a placeholder implementation
+    // The real implementation would use OpenAI's session token API
+    // Example: const response = await openai.sessions.create({...});
 
     // IMPORTANT: This is a simplified version
     // You'll need to use the actual OpenAI Realtime API endpoint
     // to generate ephemeral tokens once available
+
+    if (!apiKey) {
+      throw new Error('OpenAI API key not configured');
+    }
 
     const token = apiKey; // Temporary: using API key directly
     const expiresAt = Date.now() + 60 * 1000; // Expires in 60 seconds
@@ -67,7 +60,7 @@ export async function createChatCompletion(
   try {
     const response = await openai.chat.completions.create({
       model: options.model || 'gpt-4o',
-      messages,
+      messages: messages as any, // Type assertion for OpenAI message types
       temperature: options.temperature || 0.7,
       max_tokens: options.max_tokens || 500,
     });

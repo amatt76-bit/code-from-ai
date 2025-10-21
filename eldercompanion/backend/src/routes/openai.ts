@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import { generateEphemeralToken } from '../services/openai-service';
 import { authenticateToken, AuthRequest } from '../middleware/auth';
 
@@ -36,7 +36,7 @@ router.post('/token', authenticateToken, async (req: AuthRequest, res: Response)
  * GET /api/openai/status
  * Check if OpenAI API is configured correctly
  */
-router.get('/status', async (req: Request, res: Response): Promise<void> => {
+router.get('/status', async (_req: Request, res: Response): Promise<void> => {
   try {
     const isConfigured = !!process.env.OPENAI_API_KEY;
 
