@@ -5,6 +5,7 @@
 
 import { open } from '@op-engineering/op-sqlite';
 import type { DB } from '@op-engineering/op-sqlite';
+import { runMigrations, getMigrationInfo } from './migrations';
 
 const DB_NAME = 'habit_hero.db';
 let db: DB | null = null;
@@ -20,17 +21,14 @@ export function getDatabase(): DB {
 }
 
 /**
- * Initialize database - create all tables
+ * Initialize database - run migrations to latest version
  */
 export async function initializeDatabase(): Promise<void> {
   const database = getDatabase();
 
   try {
-    // Enable foreign keys
-    database.execute('PRAGMA foreign_keys = ON;');
-
-    // Create tables
-    await createTables(database);
+    // Run migrations to bring database to latest version
+    runMigrations(database);
 
     console.log('✅ Database initialized successfully');
   } catch (error) {
@@ -270,6 +268,18 @@ export async function resetDatabase(): Promise<void> {
   await dropAllTables();
   await initializeDatabase();
   console.log('✅ Database reset complete');
+}
+
+/**
+ * Get database migration information
+ */
+export function getDatabaseInfo(): {
+  currentVersion: number;
+  latestVersion: number;
+  pendingMigrations: string[];
+} {
+  const database = getDatabase();
+  return getMigrationInfo(database);
 }
 
 /**
