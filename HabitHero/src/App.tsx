@@ -13,6 +13,9 @@ import { seedInitialData } from '@database/seeders/initialData';
 import { initializeNotifications } from '@services/NotificationService';
 import { startMidnightResetService } from '@services/MidnightResetService';
 
+// Import stores
+import { initializeStores } from '@store';
+
 // Import theme
 import { colors } from '@theme/colors';
 
@@ -28,6 +31,10 @@ const App = () => {
         // Seed initial data (user, achievements, etc.)
         await seedInitialData();
         console.log('✓ Initial data seeded');
+
+        // Initialize Zustand stores (load data into state)
+        await initializeStores();
+        console.log('✓ Stores initialized');
 
         // Initialize notifications
         await initializeNotifications();

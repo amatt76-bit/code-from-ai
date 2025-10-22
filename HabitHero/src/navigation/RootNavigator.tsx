@@ -14,13 +14,14 @@ const RootNavigator = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>🏆 Habit Hero</Text>
-      <Text style={styles.subtitle}>Database Layer Complete!</Text>
+      <Text style={styles.subtitle}>Phase 1 & 2 Complete!</Text>
       <Text style={styles.message}>
         ✅ SQLite schema created{'\n'}
         ✅ CRUD queries implemented{'\n'}
-        ✅ Seeders ready{'\n'}
+        ✅ Zustand stores configured{'\n'}
+        ✅ State management ready{'\n'}
         {'\n'}
-        📋 Next: Build UI screens
+        📋 Next: Build UI components
       </Text>
     </View>
   );
