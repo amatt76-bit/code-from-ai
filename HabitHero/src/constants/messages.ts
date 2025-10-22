@@ -28,20 +28,20 @@ export const PERSONALITY_MESSAGES: Record<PersonalityType, PersonalityMessages> 
     ],
     onStreakBreak: [
       "It's okay! Tomorrow's a fresh start 💙",
-      'Life happens. Let's bounce back together!',
+      "Life happens. Let's bounce back together!",
       "You've got this. One bad day doesn't define you.",
       'Tomorrow is a new opportunity!',
       'We all stumble. What matters is getting back up!',
       "You're still amazing. Let's try again!",
     ],
     onSnooze: [
-      'Taking a breather? That's okay!',
-      'No rush, you'll get to it!',
+      "Taking a breather? That's okay!",
+      "No rush, you'll get to it!",
       'Self-care is important too!',
       "I believe in you, whenever you're ready!",
     ],
     onThirdSnooze: [
-      'Hey, still here for you when you're ready 💙',
+      "Hey, still here for you when you're ready 💙",
       'Third time... maybe now? No pressure!',
       "You've got a few more minutes. You can do it!",
     ],
@@ -54,10 +54,10 @@ export const PERSONALITY_MESSAGES: Record<PersonalityType, PersonalityMessages> 
       'Wow, you actually did it. Shocking.',
       "Crushing it like it's your job... oh wait.",
       'Nice work, try not to break this streak like the last one',
-      'Well, well, well. Someone's feeling productive',
+      "Well, well, well. Someone's feeling productive",
       'You did a thing! Alert the media!',
       'Fancy seeing you here, being productive',
-      'Oh, so we're trying today? Interesting...',
+      "Oh, so we're trying today? Interesting...",
       'Someone woke up on the productive side of the bed',
     ],
     onStreakBreak: [
@@ -71,7 +71,7 @@ export const PERSONALITY_MESSAGES: Record<PersonalityType, PersonalityMessages> 
     onSnooze: [
       'Oh, just 5 more minutes? Classic.',
       'Sure, why do it now when you can do it later?',
-      'Procrastination is an art, and you're Picasso',
+      "Procrastination is an art, and you're Picasso",
       'Snoozing again? Bold strategy.',
     ],
     onThirdSnooze: [
@@ -92,7 +92,7 @@ export const PERSONALITY_MESSAGES: Record<PersonalityType, PersonalityMessages> 
       'SOLID WORK, SOLDIER! KEEP MARCHING!',
       'VICTORY! NOW ONTO THE NEXT ONE!',
       'DISCIPLINE EQUALS FREEDOM! HOORAH!',
-      'THAT'S HOW CHAMPIONS DO IT!',
+      "THAT'S HOW CHAMPIONS DO IT!",
       'NO RETREAT, NO SURRENDER! WELL DONE!',
     ],
     onStreakBreak: [
@@ -147,7 +147,7 @@ export const PERSONALITY_MESSAGES: Record<PersonalityType, PersonalityMessages> 
     onThirdSnooze: [
       'The universe whispers: perhaps now?',
       'Balance requires action and rest. Choose wisely.',
-      'Three times you've paused. What is your heart saying?',
+      "Three times you've paused. What is your heart saying?",
     ],
   },
 };
@@ -166,10 +166,10 @@ export const STREAK_MILESTONES: Record<number, { emoji: string; message: string 
 
 // Level Up Messages
 export const LEVEL_UP_MESSAGES = [
-  'LEVEL UP! You're unstoppable! 🎉',
+  "LEVEL UP! You're unstoppable! 🎉",
   'NEW LEVEL UNLOCKED! Keep crushing it! 💪',
-  'LEVEL UP! Your dedication is paying off! ⭐',
-  'BOOM! Level up! You're on fire! 🔥',
+  "LEVEL UP! Your dedication is paying off! ⭐",
+  "BOOM! Level up! You're on fire! 🔥",
   'NEXT LEVEL! This is just the beginning! 🚀',
 ];
 
@@ -178,7 +178,7 @@ export const XP_BONUS_MESSAGES = {
   earlyCompletion: 'Early bird bonus! 🌅',
   firstOfDay: 'First win of the day! 🏆',
   allCompleted: 'ALL HABITS DONE! Beast mode! 💪',
-  perfectWeek: 'PERFECT WEEK! You're a legend! 👑',
+  perfectWeek: "PERFECT WEEK! You're a legend! 👑",
   comboMultiplier: 'Combo multiplier active! 🔥',
 };
 

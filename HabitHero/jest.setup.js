@@ -3,9 +3,6 @@
  * Configures the test environment before running tests
  */
 
-// Mock React Native modules
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-
 // Mock OP-SQLite
 jest.mock('@op-engineering/op-sqlite', () => ({
   open: jest.fn(() => ({
@@ -40,8 +37,8 @@ jest.mock('@react-navigation/native', () => ({
   createNavigationContainerRef: jest.fn(),
 }));
 
-jest.mock('@react-navigation/native-stack', () => ({
-  createNativeStackNavigator: jest.fn(),
+jest.mock('@react-navigation/stack', () => ({
+  createStackNavigator: jest.fn(),
 }));
 
 jest.mock('@react-navigation/bottom-tabs', () => ({
