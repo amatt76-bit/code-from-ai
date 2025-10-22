@@ -9,6 +9,7 @@ import RootNavigator from '@navigation/RootNavigator';
 
 // Import services
 import { initializeDatabase } from '@database/schema';
+import { seedInitialData } from '@database/seeders/initialData';
 import { initializeNotifications } from '@services/NotificationService';
 import { startMidnightResetService } from '@services/MidnightResetService';
 
@@ -23,6 +24,10 @@ const App = () => {
         // Initialize database
         await initializeDatabase();
         console.log('✓ Database initialized');
+
+        // Seed initial data (user, achievements, etc.)
+        await seedInitialData();
+        console.log('✓ Initial data seeded');
 
         // Initialize notifications
         await initializeNotifications();
