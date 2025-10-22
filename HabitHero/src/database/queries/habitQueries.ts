@@ -150,35 +150,48 @@ export function completeHabit(habitId: string, xpEarned: number): void {
     throw new Error('Habit not found');
   }
 
-  // Update habit status
-  db.execute(
-    `UPDATE habits SET
-      today_status = 'completed',
-      last_completed_date = ?,
-      snoozed_until = NULL,
-      snoozes_count = 0
-    WHERE id = ?`,
-    [dateStr, habitId]
-  );
-
-  // Calculate new streak
+  // Calculate new streak before starting transaction
   const newStreak = calculateNewStreak(habit, dateStr);
+  const wasSnoozed = habit.snoozesCount > 0 ? 1 : 0;
 
-  db.execute(
-    `UPDATE habits SET
-      current_streak = ?,
-      best_streak = MAX(best_streak, ?)
-    WHERE id = ?`,
-    [newStreak, newStreak, habitId]
-  );
+  // Use transaction to ensure atomicity
+  try {
+    db.execute('BEGIN TRANSACTION');
 
-  // Add to completion history
-  db.execute(
-    `INSERT OR REPLACE INTO completion_history
-    (habit_id, date, completed_at, xp_earned, was_snoozed, mercy_used)
-    VALUES (?, ?, ?, ?, ?, ?)`,
-    [habitId, dateStr, timestampStr, xpEarned, habit.snoozesCount > 0 ? 1 : 0, 0]
-  );
+    // Update habit status
+    db.execute(
+      `UPDATE habits SET
+        today_status = 'completed',
+        last_completed_date = ?,
+        snoozed_until = NULL,
+        snoozes_count = 0
+      WHERE id = ?`,
+      [dateStr, habitId]
+    );
+
+    // Update streak
+    db.execute(
+      `UPDATE habits SET
+        current_streak = ?,
+        best_streak = MAX(best_streak, ?)
+      WHERE id = ?`,
+      [newStreak, newStreak, habitId]
+    );
+
+    // Add to completion history
+    db.execute(
+      `INSERT OR REPLACE INTO completion_history
+      (habit_id, date, completed_at, xp_earned, was_snoozed, mercy_used)
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [habitId, dateStr, timestampStr, xpEarned, wasSnoozed, 0]
+    );
+
+    db.execute('COMMIT');
+  } catch (error) {
+    db.execute('ROLLBACK');
+    console.error('Failed to complete habit, transaction rolled back:', error);
+    throw error;
+  }
 }
 
 /**
@@ -337,8 +350,14 @@ function calculateNewStreak(habit: Habit, todayDateStr: string): number {
     return 1; // First completion
   }
 
+  // Validate dates
   const lastDate = new Date(habit.lastCompletedDate);
   const today = new Date(todayDateStr);
+
+  if (isNaN(lastDate.getTime()) || isNaN(today.getTime())) {
+    console.error('Invalid date in streak calculation, resetting to 1');
+    return 1;
+  }
 
   const diffTime = today.getTime() - lastDate.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -359,18 +378,30 @@ function calculateNewStreak(habit: Habit, todayDateStr: string): number {
  * Helper: Map database row to Habit model
  */
 function mapRowToHabit(row: any): Habit {
+  // Parse reminder times with error handling
+  let reminderTimes: string[] = [];
+  try {
+    reminderTimes = JSON.parse(row.reminder_times);
+    if (!Array.isArray(reminderTimes)) {
+      reminderTimes = [];
+    }
+  } catch (error) {
+    console.error('Failed to parse reminder_times, using empty array:', error);
+    reminderTimes = [];
+  }
+
   return {
     id: row.id,
     name: row.name,
-    nickname: row.nickname,
-    emoji: row.emoji,
-    reminderTimes: JSON.parse(row.reminder_times),
+    nickname: row.nickname || undefined, // Convert NULL to undefined
+    emoji: row.emoji || undefined, // Convert NULL to undefined
+    reminderTimes,
     currentStreak: row.current_streak,
     bestStreak: row.best_streak,
-    lastCompletedDate: row.last_completed_date,
+    lastCompletedDate: row.last_completed_date || undefined, // Convert NULL to undefined
     createdDate: row.created_date,
     todayStatus: row.today_status,
-    snoozedUntil: row.snoozed_until,
+    snoozedUntil: row.snoozed_until || undefined, // Convert NULL to undefined
     snoozesCount: row.snoozes_count,
     personality: row.personality,
     completionHistory: [], // Lazy load when needed
