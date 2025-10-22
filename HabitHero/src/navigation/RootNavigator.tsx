@@ -1,58 +1,111 @@
 /**
  * Root Navigator
- * Main navigation structure
- *
- * TODO: Implement full navigation with tabs and stacks
+ * Main navigation structure with bottom tabs
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '@theme/colors';
-import { typography } from '@theme/typography';
+import { Text } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { colors, typography } from '@theme';
 
-const RootNavigator = () => {
+// Screens
+import { HomeScreen } from '../screens/HomeScreen';
+import { HabitsScreen } from '../screens/HabitsScreen';
+import { StatsScreen } from '../screens/StatsScreen';
+import { AchievementsScreen } from '../screens/AchievementsScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+
+const Tab = createBottomTabNavigator();
+
+function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>🏆 Habit Hero</Text>
-      <Text style={styles.subtitle}>Phase 1 & 2 Complete!</Text>
-      <Text style={styles.message}>
-        ✅ SQLite schema created{'\n'}
-        ✅ CRUD queries implemented{'\n'}
-        ✅ Zustand stores configured{'\n'}
-        ✅ State management ready{'\n'}
-        {'\n'}
-        📋 Next: Build UI components
-      </Text>
-    </View>
+    <Text style={{ fontSize: 24, opacity: focused ? 1 : 0.5 }}>
+      {emoji}
+    </Text>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background.light,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
-  },
-  title: {
-    fontSize: typography.heading1.fontSize,
-    fontWeight: typography.heading1.fontWeight,
-    color: colors.primary,
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontSize: typography.heading3.fontSize,
-    fontWeight: typography.heading3.fontWeight,
-    color: colors.text.primary,
-    marginBottom: 24,
-  },
-  message: {
-    fontSize: typography.body.fontSize,
-    color: colors.text.secondary,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-});
+export default function RootNavigator() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: colors.surface,
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.border,
+          },
+          headerTitleStyle: {
+            fontFamily: typography.fontFamily.bold,
+            fontSize: typography.fontSize.lg,
+            color: colors.textPrimary,
+          },
+          tabBarStyle: {
+            backgroundColor: colors.surface,
+            borderTopWidth: 1,
+            borderTopColor: colors.border,
+            elevation: 0,
+            height: 60,
+            paddingBottom: 8,
+            paddingTop: 8,
+          },
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: colors.textSecondary,
+          tabBarLabelStyle: {
+            fontFamily: typography.fontFamily.medium,
+            fontSize: typography.fontSize.xs,
+          },
+        }}
+      >
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} />,
+            headerTitle: 'Habit Hero',
+          }}
+        />
 
-export default RootNavigator;
+        <Tab.Screen
+          name="Habits"
+          component={HabitsScreen}
+          options={{
+            tabBarLabel: 'Habits',
+            tabBarIcon: ({ focused }) => <TabIcon emoji="✅" focused={focused} />,
+          }}
+        />
+
+        <Tab.Screen
+          name="Stats"
+          component={StatsScreen}
+          options={{
+            tabBarLabel: 'Stats',
+            tabBarIcon: ({ focused }) => <TabIcon emoji="📊" focused={focused} />,
+          }}
+        />
+
+        <Tab.Screen
+          name="Achievements"
+          component={AchievementsScreen}
+          options={{
+            tabBarLabel: 'Achievements',
+            tabBarIcon: ({ focused }) => <TabIcon emoji="🏆" focused={focused} />,
+          }}
+        />
+
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            tabBarLabel: 'Profile',
+            tabBarIcon: ({ focused }) => <TabIcon emoji="👤" focused={focused} />,
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}

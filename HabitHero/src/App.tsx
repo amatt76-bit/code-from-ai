@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
 
 // Import navigation
 import RootNavigator from '@navigation/RootNavigator';
@@ -17,14 +16,14 @@ import { startMidnightResetService } from '@services/MidnightResetService';
 import { initializeStores } from '@store';
 
 // Import theme
-import { colors } from '@theme/colors';
+import { colors } from '@theme';
 
 const App = () => {
   useEffect(() => {
     // Initialize app services
     const initializeApp = async () => {
       try {
-        // Initialize database
+        // Initialize database with migrations
         await initializeDatabase();
         console.log('✓ Database initialized');
 
@@ -43,8 +42,10 @@ const App = () => {
         // Start midnight reset service
         startMidnightResetService();
         console.log('✓ Midnight reset service started');
+
+        console.log('🎉 App initialization complete!');
       } catch (error) {
-        console.error('Error initializing app:', error);
+        console.error('❌ Error initializing app:', error);
       }
     };
 
@@ -56,11 +57,9 @@ const App = () => {
       <SafeAreaProvider>
         <StatusBar
           barStyle="dark-content"
-          backgroundColor={colors.background.light}
+          backgroundColor={colors.background}
         />
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
+        <RootNavigator />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
